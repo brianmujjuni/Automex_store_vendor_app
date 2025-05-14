@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:automex_store_vendor/global_variables.dart';
 import 'package:automex_store_vendor/models/vendor.dart';
 import 'package:automex_store_vendor/services/manage_http_response.dart';
@@ -20,17 +22,44 @@ class VendorAuthController {
           role: '',
           password: password);
       http.Response response = await http.post(
-          Uri.parse("$uri//api/vendor/signup"),
-          body: vendor.toJson(),
-          headers: <String, String>{
-            "Content-Type": "application/json; charset=UTF-8",
-          });
+        Uri.parse("$uri/api/vendor/signup"),
+        body: vendor.toJson(),
+        headers: <String, String>{
+          "Content-Type": "application/json; charset=UTF-8",
+        },
+      );
       manageHttpResponse(
           response: response,
           context: context,
           onSuccess: () {
             showSnackBar(context, 'Vendor Account Created');
           });
-    } catch (error) {}
+    } catch (error) {
+      showSnackBar(context, '$error');
+    }
+  }
+
+  //function to consume the backend vendor signin api
+  Future<void> signInVendor(
+      {required String email,
+      required String password,
+      required context}) async {
+    try {
+      http.Response response = await http.post(
+        Uri.parse('$uri/api/vendor/signin'),
+        body: jsonEncode({"email": email, "password": password}),
+        headers: <String, String>{
+          "Content-Type": "application/json; charset=UTF-8",
+        },
+      );
+      manageHttpResponse(
+          response: response,
+          context: context,
+          onSuccess: () {
+            showSnackBar(context, 'Logged In Successfully');
+          });
+    } catch (error) {
+      showSnackBar(context, '$error');
+    }
   }
 }
