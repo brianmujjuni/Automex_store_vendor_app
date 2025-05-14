@@ -1,35 +1,30 @@
 import 'package:automex_store_vendor/controllers/vendor_auth_controller.dart';
-import 'package:automex_store_vendor/views/screens/authentication/login_screen.dart';
+import 'package:automex_store_vendor/views/screens/authentication/register_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key});
-
+class LoginScreen extends StatefulWidget {
   @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
+  _LoginScreenState createState() => _LoginScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
+class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final VendorAuthController _vendorAuthController = VendorAuthController();
-  bool _isLoading = false;
   late String email;
-  late String fullName;
   late String password;
-  registerVendor() async {
+  bool isLoading = false;
+
+  loginUser() async {
     setState(() {
-      _isLoading = true;
+      isLoading = true;
     });
     await _vendorAuthController
-        .signUpVendor(
-            fullName: fullName,
-            email: email,
-            password: password,
-            context: context)
+        .signInVendor(context: context, email: email, password: password)
         .whenComplete(() {
+      _formKey.currentState!.reset();
       setState(() {
-        _isLoading = false;
+        isLoading = false;
       });
     });
   }
@@ -48,7 +43,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Create Your Account',
+                    'Login Your Account',
                     style: GoogleFonts.getFont(
                       'Lato',
                       color: Color(0xFF0d120E),
@@ -71,59 +66,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     'assets/images/Illustration.png',
                     width: 200,
                     height: 200,
-                  ),
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      'Full Name',
-                      style: GoogleFonts.getFont(
-                        'Nunito Sans',
-                        color: Color(0xFF0d120E),
-                        fontWeight: FontWeight.w600,
-                        letterSpacing: 0.2,
-                        fontSize: 14,
-                      ),
-                    ),
-                  ),
-                  TextFormField(
-                    onChanged: (value) {
-                      fullName = value;
-                    },
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter your full name';
-                      } else {
-                        return null;
-                      }
-                    },
-                    decoration: InputDecoration(
-                      fillColor: Colors.white,
-                      filled: true,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(9),
-                      ),
-                      focusedBorder: InputBorder.none,
-                      enabledBorder: InputBorder.none,
-                      labelText: 'Enter your full name',
-                      labelStyle: GoogleFonts.getFont(
-                        'Nunito Sans',
-                        color: Color(0xFF0d120E),
-                        fontWeight: FontWeight.w600,
-                        letterSpacing: 0.1,
-                        fontSize: 14,
-                      ),
-                      prefixIcon: Padding(
-                        padding: EdgeInsets.all(10.0),
-                        child: Image.asset(
-                          'assets/icons/user.jpeg',
-                          width: 20,
-                          height: 20,
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
                   ),
                   Align(
                     alignment: Alignment.topLeft,
@@ -173,8 +115,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           height: 20,
                         ),
                       ),
-                      // suffix: Icon(Icons.visibility),
                     ),
+                  ),
+                  SizedBox(
+                    height: 20,
                   ),
                   TextFormField(
                     onChanged: (value) {
@@ -219,9 +163,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   InkWell(
                     onTap: () async {
                       if (_formKey.currentState!.validate()) {
-                        registerVendor();
+                        loginUser();
                       } else {
-                        print('failed to save');
+                        return null;
                       }
                     },
                     child: Container(
@@ -304,12 +248,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ),
                           ),
                           Center(
-                            child: _isLoading
+                            child: isLoading
                                 ? CircularProgressIndicator(
                                     color: Colors.white,
                                   )
                                 : Text(
-                                    'Sign Up ',
+                                    'Sign In ',
                                     style: GoogleFonts.getFont(
                                       'Lato',
                                       color: Colors.white,
@@ -328,31 +272,31 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      InkWell(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) {
-                              return LoginScreen();
-                            }),
-                          );
-                        },
-                        child: Text(
-                          'Already have an Account ?',
-                          style: GoogleFonts.roboto(
-                            fontWeight: FontWeight.w500,
-                            letterSpacing: 1,
-                          ),
+                      Text(
+                        'Need an Account ?',
+                        style: GoogleFonts.roboto(
+                          fontWeight: FontWeight.w500,
+                          letterSpacing: 1,
                         ),
                       ),
                       SizedBox(
                         width: 5,
                       ),
-                      Text(
-                        'Sign In',
-                        style: GoogleFonts.roboto(
-                            color: Color(0xFF103DE5),
-                            fontWeight: FontWeight.bold),
+                      InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) {
+                              return RegisterScreen();
+                            }),
+                          );
+                        },
+                        child: Text(
+                          'Sign up',
+                          style: GoogleFonts.roboto(
+                              color: Color(0xFF103DE5),
+                              fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ],
                   )
