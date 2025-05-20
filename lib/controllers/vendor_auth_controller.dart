@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:automex_store_vendor/global_variables.dart';
 import 'package:automex_store_vendor/models/vendor.dart';
 import 'package:automex_store_vendor/services/manage_http_response.dart';
+import 'package:automex_store_vendor/views/screens/main_vendor_screen.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class VendorAuthController {
@@ -56,6 +58,10 @@ class VendorAuthController {
           response: response,
           context: context,
           onSuccess: () {
+            Navigator.pushAndRemoveUntil(context,
+                MaterialPageRoute(builder: (context) {
+              return MainVendorScreen();
+            }), (route) => false);
             showSnackBar(context, 'Logged In Successfully');
           });
     } catch (error) {
