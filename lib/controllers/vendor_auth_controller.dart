@@ -68,14 +68,16 @@ class VendorAuthController {
             //Extract the token from the response and save it in shared preferences
             String token = jsonDecode(response.body)['token'];
             //save the token in shared preferences
-            preferences.setString('auth_token', token);
+           await preferences.setString('auth_token', token);
             //Encode the user data received from the backend to json
             final vendorJson = jsonEncode(jsonDecode(response.body)['vendor']);
             //update the application state with the vendor data
             providerContainer
                 .read(vendorProvider.notifier)
                 .setVendor(vendorJson);
-
+            //store the data in shared preferences
+            await preferences.setString('vendor', vendorJson);
+            
             Navigator.pushAndRemoveUntil(context,
                 MaterialPageRoute(builder: (context) {
               return MainVendorScreen();
