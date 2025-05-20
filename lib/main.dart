@@ -1,7 +1,8 @@
-
+import 'package:automex_store_vendor/provider/vendor_provider.dart';
 import 'package:automex_store_vendor/views/screens/authentication/register_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,7 +13,22 @@ class MyApp extends ConsumerWidget {
 
   // This widget is the root of your application.
   @override
-  Widget build(BuildContext context,WidgetRef ref) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    Future<void> _checkTokenAndUser(WidgetRef ref) async {
+      //Obtain an instance of sharedPreference
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      //retrieve the authentication token and user data stored locally
+      String? token = preferences.getString('auth_token');
+      String? vendorJson = preferences.getString('vendor');
+
+      //if both the token and the data are available,update the vendor state
+      if (token != null && vendorJson != null) {
+        ref.read(vendorProvider.notifier).setVendor(vendorJson);
+      } else {
+        ref.read(vendorProvider.notifier).signOut();
+      }
+    }
+
     return MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
