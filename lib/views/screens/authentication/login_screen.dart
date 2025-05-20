@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class LoginScreen extends StatefulWidget {
+  // const LoginScreen({super.key});
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -192,11 +193,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                 height: 60,
                                 clipBehavior: Clip.antiAlias,
                                 decoration: BoxDecoration(
-                                    border: Border.all(
-                                      width: 12,
-                                      color: Color(0xFF103DE5),
-                                    ),
-                                    borderRadius: BorderRadius.circular(30)),
+                                  border: Border.all(
+                                    width: 12,
+                                    color: Color(0xFF103DE5),
+                                  ),
+                                  borderRadius: BorderRadius.circular(30),
+                                ),
                               ),
                             ),
                           ),
@@ -210,9 +212,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                 height: 10,
                                 clipBehavior: Clip.antiAlias,
                                 decoration: BoxDecoration(
-                                    border: Border.all(width: 3),
-                                    color: Color(0xFF2141E5),
-                                    borderRadius: BorderRadius.circular(5)),
+                                  border: Border.all(width: 3),
+                                  color: Color(0xFF2141E5),
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
                               ),
                             ),
                           ),
