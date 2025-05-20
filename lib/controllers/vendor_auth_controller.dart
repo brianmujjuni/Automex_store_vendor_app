@@ -2,10 +2,15 @@ import 'dart:convert';
 
 import 'package:automex_store_vendor/global_variables.dart';
 import 'package:automex_store_vendor/models/vendor.dart';
+import 'package:automex_store_vendor/provider/vendor_provider.dart';
 import 'package:automex_store_vendor/services/manage_http_response.dart';
 import 'package:automex_store_vendor/views/screens/main_vendor_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+
+final providerContainer = ProviderContainer();
 
 class VendorAuthController {
   Future<void> signUpVendor(
@@ -57,7 +62,20 @@ class VendorAuthController {
       manageHttpResponse(
           response: response,
           context: context,
-          onSuccess: () {
+          onSuccess: () async {
+            SharedPreferences preferences =
+                await SharedPreferences.getInstance();
+            //Extract the token from the response and save it in shared preferences
+            String token = jsonDecode(response.body)['token'];
+            //save the token in shared preferences
+            preferences.setString('auth_token', token);
+            //Encode the user data received from the backend to json
+            final vendorJson = jsonEncode(jsonDecode(response.body)['vendor']);
+            //update the application state with the vendor data
+            providerContainer
+                .read(vendorProvider.notifier)
+                .setVendor(vendorJson);
+
             Navigator.pushAndRemoveUntil(context,
                 MaterialPageRoute(builder: (context) {
               return MainVendorScreen();
