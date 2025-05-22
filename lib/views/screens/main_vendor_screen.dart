@@ -31,7 +31,7 @@ class _MainVendorScreenState extends State<MainVendorScreen> {
             BottomNavigationBarItem(icon: Icon(Icons.edit), label: "Edit"),
             BottomNavigationBarItem(
                 icon: Icon(CupertinoIcons.shopping_cart), label: "Orders"),
-            BottomNavigationBarItem(icon: Icon(Icons.logout), label: "Logout"),
+            BottomNavigationBarItem(icon: Icon(Icons.person), label: "Person"),
           ]),
     );
   }
