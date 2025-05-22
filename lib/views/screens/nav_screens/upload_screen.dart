@@ -17,7 +17,7 @@ class _UploadScreenState extends State<UploadScreen> {
   List<File> images = [];
   //function to pick images from the gallery
   chooseImage() async {
-    final pickedFile = await picker.pickImage(source: ImageSource.camera);
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
     if (pickedFile == null) {
       print('No image selected');
     } else {
@@ -29,8 +29,95 @@ class _UploadScreenState extends State<UploadScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text('Uploas Screen'),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        GridView.builder(
+          shrinkWrap: true,
+          itemCount: images.length + 1,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3,
+            crossAxisSpacing: 4,
+            mainAxisSpacing: 4,
+            childAspectRatio: 1,
+          ),
+          itemBuilder: (context, index) {
+            return index == 0
+                ? Center(
+                    child: IconButton(
+                      onPressed: () {
+                        chooseImage();
+                      },
+                      icon: Icon(Icons.add),
+                    ),
+                  )
+                : SizedBox(
+                    width: 50,
+                    height: 40,
+                    child: Image.file(images[index - 1]),
+                  );
+          },
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                width: 200,
+                child: TextFormField(
+                  decoration: InputDecoration(
+                    labelText: 'Enter Product Name',
+                    hintText: 'Enter Product Name',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              SizedBox(
+                width: 200,
+                child: TextFormField(
+                  decoration: InputDecoration(
+                    labelText: 'Enter Product Price',
+                    hintText: 'Enter Product Price',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              SizedBox(
+                width: 200,
+                child: TextFormField(
+                  decoration: InputDecoration(
+                    labelText: 'Enter Product Quantity',
+                    hintText: 'Enter Product Quantity',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              SizedBox(
+                width: 200,
+                child: TextFormField(
+                  maxLines: 3,
+                  maxLength: 500,
+                  decoration: InputDecoration(
+                    labelText: 'Enter Product Description',
+                    hintText: 'Enter Product Description',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+              )
+            ],
+          ),
+        )
+      ],
     );
   }
 }
