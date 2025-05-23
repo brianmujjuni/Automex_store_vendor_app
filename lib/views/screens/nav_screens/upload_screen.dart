@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:automex_store_vendor/controllers/category_controller.dart';
+import 'package:automex_store_vendor/models/category.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -11,6 +13,14 @@ class UploadScreen extends StatefulWidget {
 }
 
 class _UploadScreenState extends State<UploadScreen> {
+  late Future<List<Category>> futureCategories;
+  Category? selectedCategory;
+  @override
+  void initState() {
+    super.initState();
+    // Call the function to fetch categories when the widget is initialized
+    futureCategories = CategoryController().fetchCategories();
+  }
   //Create an instance of image picker to handle image selection
   final ImagePicker picker = ImagePicker();
   //initialise an empty list to store the seleted images
