@@ -21,6 +21,7 @@ class _UploadScreenState extends State<UploadScreen> {
     // Call the function to fetch categories when the widget is initialized
     futureCategories = CategoryController().fetchCategories();
   }
+
   //Create an instance of image picker to handle image selection
   final ImagePicker picker = ImagePicker();
   //initialise an empty list to store the seleted images
@@ -112,6 +113,41 @@ class _UploadScreenState extends State<UploadScreen> {
               SizedBox(
                 height: 10,
               ),
+              //Dropdown to select category
+              FutureBuilder(
+                  future: futureCategories,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return Text('No categories available');
+                    } else {
+                      List<Category> categories = snapshot.data!;
+                      return DropdownButtonFormField<Category>(
+                        decoration: InputDecoration(
+                          labelText: 'Select Category',
+                          border: OutlineInputBorder(),
+                        ),
+                        value: selectedCategory,
+                        items: categories.map((Category category) {
+                          return DropdownMenuItem<Category>(
+                            value: category,
+                            child: Text(category.name),
+                          );
+                        }).toList(),
+                        onChanged: (Category? newValue) {
+                          setState(() {
+                            selectedCategory = newValue;
+                          });
+                        },
+                      );
+                    }
+                  }),
+              SizedBox(
+                height: 10,
+              ),
               SizedBox(
                 width: 200,
                 child: TextFormField(
@@ -123,7 +159,7 @@ class _UploadScreenState extends State<UploadScreen> {
                     border: OutlineInputBorder(),
                   ),
                 ),
-              )
+              ),
             ],
           ),
         )
