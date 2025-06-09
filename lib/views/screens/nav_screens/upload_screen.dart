@@ -15,6 +15,8 @@ class UploadScreen extends StatefulWidget {
 }
 
 class _UploadScreenState extends State<UploadScreen> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  
   late Future<List<Category>> futureCategories;
   Future<List<Subcategory>>? futureSubcategories;
   Subcategory? selectedSubcategory;
@@ -212,7 +214,7 @@ class _UploadScreenState extends State<UploadScreen> {
           padding: const EdgeInsets.all(15.0),
           child: InkWell(
             onTap: (){
-
+              
             },
             child: Container(
               height: 50,
