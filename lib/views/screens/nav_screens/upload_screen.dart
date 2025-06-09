@@ -16,7 +16,7 @@ class UploadScreen extends StatefulWidget {
 
 class _UploadScreenState extends State<UploadScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  
+
   late Future<List<Category>> futureCategories;
   Future<List<Subcategory>>? futureSubcategories;
   Subcategory? selectedSubcategory;
@@ -52,192 +52,195 @@ class _UploadScreenState extends State<UploadScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        GridView.builder(
-          shrinkWrap: true,
-          itemCount: images.length + 1,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3,
-            crossAxisSpacing: 4,
-            mainAxisSpacing: 4,
-            childAspectRatio: 1,
-          ),
-          itemBuilder: (context, index) {
-            return index == 0
-                ? Center(
-                    child: IconButton(
-                      onPressed: () {
-                        chooseImage();
-                      },
-                      icon: Icon(Icons.add),
-                    ),
-                  )
-                : SizedBox(
-                    width: 50,
-                    height: 40,
-                    child: Image.file(images[index - 1]),
-                  );
-          },
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                width: 200,
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    labelText: 'Enter Product Name',
-                    hintText: 'Enter Product Name',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              SizedBox(
-                width: 200,
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    labelText: 'Enter Product Price',
-                    hintText: 'Enter Product Price',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              SizedBox(
-                width: 200,
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    labelText: 'Enter Product Quantity',
-                    hintText: 'Enter Product Quantity',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              //Dropdown to select category
-              FutureBuilder(
-                  future: futureCategories,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(child: CircularProgressIndicator());
-                    } else if (snapshot.hasError) {
-                      return Text('Error: ${snapshot.error}');
-                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                      return Text('No categories available');
-                    } else {
-                      List<Category> categories = snapshot.data!;
-                      return DropdownButtonFormField<Category>(
-                        decoration: InputDecoration(
-                          labelText: 'Select Category',
-                          border: OutlineInputBorder(),
-                        ),
-                        value: selectedCategory,
-                        items: categories.map((Category category) {
-                          return DropdownMenuItem<Category>(
-                            value: category,
-                            child: Text(category.name),
-                          );
-                        }).toList(),
-                        onChanged: (Category? newValue) {
-                          setState(() {
-                            selectedCategory = newValue;
-                          });
-                          getSubcategoryByCategory(selectedCategory);
+    return Form(
+      key: _formKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          GridView.builder(
+            shrinkWrap: true,
+            itemCount: images.length + 1,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              crossAxisSpacing: 4,
+              mainAxisSpacing: 4,
+              childAspectRatio: 1,
+            ),
+            itemBuilder: (context, index) {
+              return index == 0
+                  ? Center(
+                      child: IconButton(
+                        onPressed: () {
+                          chooseImage();
                         },
-                      );
-                    }
-                  }),
-
-              //drop down to select subcategory
-              FutureBuilder(
-                  future: futureSubcategories,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(child: CircularProgressIndicator());
-                    } else if (snapshot.hasError) {
-                      return Text('Error: ${snapshot.error}');
-                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                      return Text('No Sub categories available');
-                    } else {
-                      List<Subcategory> subcategories = snapshot.data!;
-                      return DropdownButtonFormField<Subcategory>(
-                        decoration: InputDecoration(
-                          labelText: 'Select SubCategory',
-                          border: OutlineInputBorder(),
-                        ),
-                        value: selectedSubcategory,
-                        items: subcategories.map((Subcategory subcategory) {
-                          return DropdownMenuItem<Subcategory>(
-                            value: subcategory,
-                            child: Text(subcategory.subCategoryName),
-                          );
-                        }).toList(),
-                        onChanged: (Subcategory? newValue) {
-                          setState(() {
-                            selectedSubcategory = newValue;
-                          });
-                        },
-                      );
-                    }
-                  }),
-
-              SizedBox(
-                height: 10,
-              ),
-              SizedBox(
-                width: 200,
-                child: TextFormField(
-                  maxLines: 3,
-                  maxLength: 500,
-                  decoration: InputDecoration(
-                    labelText: 'Enter Product Description',
-                    hintText: 'Enter Product Description',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: InkWell(
-            onTap: (){
-              
+                        icon: Icon(Icons.add),
+                      ),
+                    )
+                  : SizedBox(
+                      width: 50,
+                      height: 40,
+                      child: Image.file(images[index - 1]),
+                    );
             },
-            child: Container(
-              height: 50,
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  width: 200,
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      labelText: 'Enter Product Name',
+                      hintText: 'Enter Product Name',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                SizedBox(
+                  width: 200,
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      labelText: 'Enter Product Price',
+                      hintText: 'Enter Product Price',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                SizedBox(
+                  width: 200,
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      labelText: 'Enter Product Quantity',
+                      hintText: 'Enter Product Quantity',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                //Dropdown to select category
+                FutureBuilder(
+                    future: futureCategories,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(child: CircularProgressIndicator());
+                      } else if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                        return Text('No categories available');
+                      } else {
+                        List<Category> categories = snapshot.data!;
+                        return DropdownButtonFormField<Category>(
+                          decoration: InputDecoration(
+                            labelText: 'Select Category',
+                            border: OutlineInputBorder(),
+                          ),
+                          value: selectedCategory,
+                          items: categories.map((Category category) {
+                            return DropdownMenuItem<Category>(
+                              value: category,
+                              child: Text(category.name),
+                            );
+                          }).toList(),
+                          onChanged: (Category? newValue) {
+                            setState(() {
+                              selectedCategory = newValue;
+                            });
+                            getSubcategoryByCategory(selectedCategory);
+                          },
+                        );
+                      }
+                    }),
+      
+                //drop down to select subcategory
+                FutureBuilder(
+                    future: futureSubcategories,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(child: CircularProgressIndicator());
+                      } else if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                        return Text('No Sub categories available');
+                      } else {
+                        List<Subcategory> subcategories = snapshot.data!;
+                        return DropdownButtonFormField<Subcategory>(
+                          decoration: InputDecoration(
+                            labelText: 'Select SubCategory',
+                            border: OutlineInputBorder(),
+                          ),
+                          value: selectedSubcategory,
+                          items: subcategories.map((Subcategory subcategory) {
+                            return DropdownMenuItem<Subcategory>(
+                              value: subcategory,
+                              child: Text(subcategory.subCategoryName),
+                            );
+                          }).toList(),
+                          onChanged: (Subcategory? newValue) {
+                            setState(() {
+                              selectedSubcategory = newValue;
+                            });
+                          },
+                        );
+                      }
+                    }),
+      
+                SizedBox(
+                  height: 10,
+                ),
+                SizedBox(
+                  width: 200,
+                  child: TextFormField(
+                    maxLines: 3,
+                    maxLength: 500,
+                    decoration: InputDecoration(
+                      labelText: 'Enter Product Description',
+                      hintText: 'Enter Product Description',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: InkWell(
+              onTap: (){
                 
-                  color: Colors.blue.shade900,
-                  borderRadius: BorderRadius.circular(5)),
-              child: Center(
-                child: Text(
-                  "Upload Product",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 17,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 1.7
+              },
+              child: Container(
+                height: 50,
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                  
+                    color: Colors.blue.shade900,
+                    borderRadius: BorderRadius.circular(5)),
+                child: Center(
+                  child: Text(
+                    "Upload Product",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 17,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1.7
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-        )
-      ],
+          )
+        ],
+      ),
     );
   }
 }
