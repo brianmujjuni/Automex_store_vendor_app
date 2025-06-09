@@ -1,7 +1,9 @@
 import 'dart:io';
 
 import 'package:automex_store_vendor/controllers/category_controller.dart';
+import 'package:automex_store_vendor/controllers/subcategory_controller.dart';
 import 'package:automex_store_vendor/models/category.dart';
+import 'package:automex_store_vendor/models/subcategory.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -14,6 +16,8 @@ class UploadScreen extends StatefulWidget {
 
 class _UploadScreenState extends State<UploadScreen> {
   late Future<List<Category>> futureCategories;
+  Future<List<Subcategory>>? futureSubcategory;
+  Subcategory? selectedSubcategory;
   Category? selectedCategory;
   @override
   void initState() {
@@ -36,6 +40,12 @@ class _UploadScreenState extends State<UploadScreen> {
         images.add(File(pickedFile.path));
       });
     }
+  }
+
+  getSubcategoryByCategory(value) {
+    //fetch subcategories based on selected category
+    futureSubcategory =
+        SubcategoryController().getSubCategoryByCategoryName(value.name);
   }
 
   @override
