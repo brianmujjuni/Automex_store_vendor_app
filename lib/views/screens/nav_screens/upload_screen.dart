@@ -16,7 +16,7 @@ class UploadScreen extends StatefulWidget {
 
 class _UploadScreenState extends State<UploadScreen> {
   late Future<List<Category>> futureCategories;
-  Future<List<Subcategory>>? futureSubcategory;
+  Future<List<Subcategory>>? futureSubcategories;
   Subcategory? selectedSubcategory;
   Category? selectedCategory;
   @override
@@ -44,7 +44,7 @@ class _UploadScreenState extends State<UploadScreen> {
 
   getSubcategoryByCategory(value) {
     //fetch subcategories based on selected category
-    futureSubcategory =
+    futureSubcategories =
         SubcategoryController().getSubCategoryByCategoryName(value.name);
   }
 
@@ -156,6 +156,40 @@ class _UploadScreenState extends State<UploadScreen> {
                       );
                     }
                   }),
+
+              //drop down to select subcategory
+              FutureBuilder(
+                  future: futureSubcategories,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return Text('No Sub categories available');
+                    } else {
+                      List<Subcategory> subcategories = snapshot.data!;
+                      return DropdownButtonFormField<Subcategory>(
+                        decoration: InputDecoration(
+                          labelText: 'Select SubCategory',
+                          border: OutlineInputBorder(),
+                        ),
+                        value: selectedSubcategory,
+                        items: subcategories.map((Subcategory subcategory) {
+                          return DropdownMenuItem<Subcategory>(
+                            value: subcategory,
+                            child: Text(subcategory.subCategoryName),
+                          );
+                        }).toList(),
+                        onChanged: (Subcategory? newValue) {
+                          setState(() {
+                            selectedSubcategory = newValue;
+                          });
+                        },
+                      );
+                    }
+                  }),
+
               SizedBox(
                 height: 10,
               ),
