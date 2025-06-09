@@ -151,6 +151,7 @@ class _UploadScreenState extends State<UploadScreen> {
                           setState(() {
                             selectedCategory = newValue;
                           });
+                          getSubcategoryByCategory(selectedCategory);
                         },
                       );
                     }
