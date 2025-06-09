@@ -207,6 +207,33 @@ class _UploadScreenState extends State<UploadScreen> {
               ),
             ],
           ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: InkWell(
+            onTap: (){
+
+            },
+            child: Container(
+              height: 50,
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                
+                  color: Colors.blue.shade900,
+                  borderRadius: BorderRadius.circular(5)),
+              child: Center(
+                child: Text(
+                  "Upload Product",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 1.7
+                  ),
+                ),
+              ),
+            ),
+          ),
         )
       ],
     );
