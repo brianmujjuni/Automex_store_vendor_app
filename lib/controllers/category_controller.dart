@@ -12,7 +12,7 @@ class CategoryController {
           headers: <String, String>{
             "Content-Type": "application/json; charset=UTF-8"
           });
-          print(response.body);
+        
           
       if (response.statusCode == 200) {
         final List<dynamic> data = jsonDecode(response.body);

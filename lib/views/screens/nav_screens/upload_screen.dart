@@ -19,8 +19,9 @@ class _UploadScreenState extends State<UploadScreen> {
 
   late Future<List<Category>> futureCategories;
   Future<List<Subcategory>>? futureSubcategories;
-  Subcategory? selectedSubcategory;
+
   Category? selectedCategory;
+  Subcategory? selectedSubcategory;
   @override
   void initState() {
     super.initState();
@@ -47,7 +48,9 @@ class _UploadScreenState extends State<UploadScreen> {
   getSubcategoryByCategory(value) {
     //fetch subcategories based on selected category
     futureSubcategories =
-        SubcategoryController().getSubCategoryByCategoryName(value.name);
+        SubcategoryController().getSubCategoriesByCategoryName(value.name);
+    //reset the selected subcategory
+    selectedSubcategory = null;
   }
 
   @override
@@ -91,6 +94,13 @@ class _UploadScreenState extends State<UploadScreen> {
                 SizedBox(
                   width: 200,
                   child: TextFormField(
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Enter Product Name";
+                      } else {
+                        return null;
+                      }
+                    },
                     decoration: InputDecoration(
                       labelText: 'Enter Product Name',
                       hintText: 'Enter Product Name',
@@ -104,6 +114,13 @@ class _UploadScreenState extends State<UploadScreen> {
                 SizedBox(
                   width: 200,
                   child: TextFormField(
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Enter Product Price";
+                      } else {
+                        return null;
+                      }
+                    },
                     decoration: InputDecoration(
                       labelText: 'Enter Product Price',
                       hintText: 'Enter Product Price',
@@ -117,6 +134,13 @@ class _UploadScreenState extends State<UploadScreen> {
                 SizedBox(
                   width: 200,
                   child: TextFormField(
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Enter Product Quantity";
+                      } else {
+                        return null;
+                      }
+                    },
                     decoration: InputDecoration(
                       labelText: 'Enter Product Quantity',
                       hintText: 'Enter Product Quantity',
@@ -128,78 +152,153 @@ class _UploadScreenState extends State<UploadScreen> {
                   height: 10,
                 ),
                 //Dropdown to select category
+                // FutureBuilder(
+                //     future: futureCategories,
+                //     builder: (context, snapshot) {
+                //       if (snapshot.connectionState == ConnectionState.waiting) {
+                //         return Center(child: CircularProgressIndicator());
+                //       } else if (snapshot.hasError) {
+                //         return Text('Error: ${snapshot.error}');
+                //       } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                //         return Text('No categories available');
+                //       } else {
+                //         List<Category> categories = snapshot.data!;
+                //         return DropdownButtonFormField<Category>(
+                //           decoration: InputDecoration(
+                //             labelText: 'Select Category',
+                //             border: OutlineInputBorder(),
+                //           ),
+                //           value: selectedCategory,
+                //           items: categories.map((Category category) {
+                //             return DropdownMenuItem<Category>(
+                //               value: category,
+                //               child: Text(category.name),
+                //             );
+                //           }).toList(),
+                //           onChanged: (Category? newValue) {
+                //             setState(() {
+                //               selectedCategory = newValue;
+                //             });
+                //             getSubcategoryByCategory(selectedCategory);
+                //           },
+                //         );
+                //       }
+                //     }),
                 FutureBuilder(
                     future: futureCategories,
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Center(child: CircularProgressIndicator());
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
                       } else if (snapshot.hasError) {
-                        return Text('Error: ${snapshot.error}');
+                        return Center(child: Text('Error: ${snapshot.error}'));
                       } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                        return Text('No categories available');
+                        return Center(
+                          child: Text("No Category"),
+                        );
                       } else {
-                        List<Category> categories = snapshot.data!;
-                        return DropdownButtonFormField<Category>(
-                          decoration: InputDecoration(
-                            labelText: 'Select Category',
-                            border: OutlineInputBorder(),
-                          ),
+                        return DropdownButton<Category>(
                           value: selectedCategory,
-                          items: categories.map((Category category) {
+                          hint: Text("Select Category"),
+                          items: snapshot.data!.map((Category category) {
                             return DropdownMenuItem<Category>(
                               value: category,
                               child: Text(category.name),
                             );
                           }).toList(),
-                          onChanged: (Category? newValue) {
+                          onChanged: (value) {
                             setState(() {
-                              selectedCategory = newValue;
+                              selectedCategory = value;
                             });
                             getSubcategoryByCategory(selectedCategory);
                           },
                         );
                       }
                     }),
-      
+
                 //drop down to select subcategory
-                FutureBuilder(
+                // FutureBuilder(
+                //     future: futureSubcategories,
+                //     builder: (context, snapshot) {
+                //       if (snapshot.connectionState == ConnectionState.waiting) {
+                //         return Center(child: CircularProgressIndicator());
+                //       } else if (snapshot.hasError) {
+                //         return Text('Error: ${snapshot.error}');
+                //       } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                //         return Text('No Sub categories available');
+                //       } else {
+                //         List<Subcategory> subcategories = snapshot.data!;
+                //         return DropdownButtonFormField<Subcategory>(
+                //           decoration: InputDecoration(
+                //             labelText: 'Select SubCategory',
+                //             border: OutlineInputBorder(),
+                //           ),
+                //           value: selectedSubcategory,
+                //           items: subcategories.map((Subcategory subcategory) {
+                //             return DropdownMenuItem<Subcategory>(
+                //               value: subcategory,
+                //               child: Text(subcategory.subCategoryName),
+                //             );
+                //           }).toList(),
+                //           onChanged: (Subcategory? newValue) {
+                //             setState(() {
+                //               selectedSubcategory = newValue;
+                //             });
+                //           },
+                //         );
+                //       }
+                //     }),
+
+                FutureBuilder<List<Subcategory>>(
                     future: futureSubcategories,
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Center(child: CircularProgressIndicator());
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
                       } else if (snapshot.hasError) {
-                        return Text('Error: ${snapshot.error}');
+                        return Center(
+                          child: Text('Error: ${snapshot.error}'),
+                        );
                       } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                        return Text('No Sub categories available');
+                    
+                        return Center(
+                          child: Text('No Category'),
+                        );
                       } else {
-                        List<Subcategory> subcategories = snapshot.data!;
-                        return DropdownButtonFormField<Subcategory>(
-                          decoration: InputDecoration(
-                            labelText: 'Select SubCategory',
-                            border: OutlineInputBorder(),
-                          ),
+                        return DropdownButton<Subcategory>(
                           value: selectedSubcategory,
-                          items: subcategories.map((Subcategory subcategory) {
+                          hint: Text('Select subcategory'),
+                          items: snapshot.data!.map((Subcategory subcategory) {
+                            
                             return DropdownMenuItem<Subcategory>(
                               value: subcategory,
                               child: Text(subcategory.subCategoryName),
                             );
                           }).toList(),
-                          onChanged: (Subcategory? newValue) {
+                          onChanged: (value) {
                             setState(() {
-                              selectedSubcategory = newValue;
+                              selectedSubcategory = value;
                             });
                           },
                         );
                       }
                     }),
-      
+
                 SizedBox(
                   height: 10,
                 ),
                 SizedBox(
                   width: 200,
                   child: TextFormField(
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Enter Product description";
+                      } else {
+                        return null;
+                      }
+                    },
                     maxLines: 3,
                     maxLength: 500,
                     decoration: InputDecoration(
@@ -215,25 +314,27 @@ class _UploadScreenState extends State<UploadScreen> {
           Padding(
             padding: const EdgeInsets.all(15.0),
             child: InkWell(
-              onTap: (){
-                
+              onTap: () {
+                if (_formKey.currentState!.validate()) {
+                  print('Uploaded');
+                } else {
+                  print("Please enter all the fields");
+                }
               },
               child: Container(
                 height: 50,
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
-                  
                     color: Colors.blue.shade900,
                     borderRadius: BorderRadius.circular(5)),
                 child: Center(
                   child: Text(
                     "Upload Product",
                     style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 17,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 1.7
-                    ),
+                        color: Colors.white,
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 1.7),
                   ),
                 ),
               ),
