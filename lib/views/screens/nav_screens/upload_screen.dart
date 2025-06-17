@@ -23,6 +23,12 @@ class _UploadScreenState extends State<UploadScreen> {
 
   Category? selectedCategory;
   Subcategory? selectedSubcategory;
+
+  late String productName;
+  late int productPrice;
+  late int quantity;
+  late String description;
+
   @override
   void initState() {
     super.initState();
@@ -95,6 +101,9 @@ class _UploadScreenState extends State<UploadScreen> {
                 SizedBox(
                   width: 200,
                   child: TextFormField(
+                    onChanged: (value) {
+                      productName = value;
+                    },
                     validator: (value) {
                       if (value!.isEmpty) {
                         return "Enter Product Name";
@@ -115,6 +124,9 @@ class _UploadScreenState extends State<UploadScreen> {
                 SizedBox(
                   width: 200,
                   child: TextFormField(
+                    onChanged: (value) {
+                      productPrice = int.parse(value);
+                    },
                     validator: (value) {
                       if (value!.isEmpty) {
                         return "Enter Product Price";
@@ -135,6 +147,9 @@ class _UploadScreenState extends State<UploadScreen> {
                 SizedBox(
                   width: 200,
                   child: TextFormField(
+                    onChanged: (value) {
+                      quantity = int.parse(value);
+                    },
                     validator: (value) {
                       if (value!.isEmpty) {
                         return "Enter Product Quantity";
@@ -190,13 +205,16 @@ class _UploadScreenState extends State<UploadScreen> {
                   child: FutureBuilder(
                       future: futureCategories,
                       builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
                           return Center(
                             child: CircularProgressIndicator(),
                           );
                         } else if (snapshot.hasError) {
-                          return Center(child: Text('Error: ${snapshot.error}'));
-                        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                          return Center(
+                              child: Text('Error: ${snapshot.error}'));
+                        } else if (!snapshot.hasData ||
+                            snapshot.data!.isEmpty) {
                           return Center(
                             child: Text("No Category"),
                           );
@@ -259,7 +277,8 @@ class _UploadScreenState extends State<UploadScreen> {
                   child: FutureBuilder<List<Subcategory>>(
                       future: futureSubcategories,
                       builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
                           return Center(
                             child: CircularProgressIndicator(),
                           );
@@ -267,8 +286,8 @@ class _UploadScreenState extends State<UploadScreen> {
                           return Center(
                             child: Text('Error: ${snapshot.error}'),
                           );
-                        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                      
+                        } else if (!snapshot.hasData ||
+                            snapshot.data!.isEmpty) {
                           return Center(
                             child: Text('No Category'),
                           );
@@ -276,8 +295,8 @@ class _UploadScreenState extends State<UploadScreen> {
                           return DropdownButton<Subcategory>(
                             value: selectedSubcategory,
                             hint: Text('Select subcategory'),
-                            items: snapshot.data!.map((Subcategory subcategory) {
-                              
+                            items:
+                                snapshot.data!.map((Subcategory subcategory) {
                               return DropdownMenuItem<Subcategory>(
                                 value: subcategory,
                                 child: Text(subcategory.subCategoryName),
@@ -299,6 +318,9 @@ class _UploadScreenState extends State<UploadScreen> {
                 SizedBox(
                   width: 200,
                   child: TextFormField(
+                    onChanged: (value) {
+                      description = value;
+                    },
                     validator: (value) {
                       if (value!.isEmpty) {
                         return "Enter Product description";
@@ -321,9 +343,19 @@ class _UploadScreenState extends State<UploadScreen> {
           Padding(
             padding: const EdgeInsets.all(15.0),
             child: InkWell(
-              onTap: () {
+              onTap: () async {
                 if (_formKey.currentState!.validate()) {
-                  print('Uploaded');
+                  _productController.uploadProduct(
+                      productName: productName,
+                      productPrice: productPrice,
+                      quantity: quantity,
+                      description: description,
+                      category: selectedCategory!.name,
+                      subCategory: selectedSubcategory!.subCategoryName,
+                      pickedImages: images,
+                      vendorId: vendorId,
+                      fullName: fullName,
+                      context: context);
                 } else {
                   print("Please enter all the fields");
                 }
@@ -340,7 +372,7 @@ class _UploadScreenState extends State<UploadScreen> {
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 17,
-                        fontWeight: FontWeight.bold ,
+                        fontWeight: FontWeight.bold,
                         letterSpacing: 1.7),
                   ),
                 ),
