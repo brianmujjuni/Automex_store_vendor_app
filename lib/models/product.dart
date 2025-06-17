@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class Product {
   final String id;
   final String productName;
@@ -6,7 +8,7 @@ class Product {
   final String description;
   final String category;
   final String subCategory;
-  final String images;
+  final List<String> images;
   final String vendorId;
   final String fullName;
 
@@ -30,13 +32,14 @@ class Product {
       'quantity': quantity,
       'description': description,
       'category': category,
+      'vendorId': vendorId,
+      'fullName': fullName,
       'subCategory': subCategory,
       'images': images,
-      'vendorId': vendorId,
-      'fullName': fullName
     };
   }
-  factory Product.fromMap(Map<String,dynamic>map){
+
+  factory Product.fromMap(Map<String, dynamic> map) {
     return Product(
       id: map['_id'] as String,
       productName: map['productName'] as String,
@@ -44,10 +47,17 @@ class Product {
       quantity: map['quantity'] as int,
       description: map['description'] as String,
       category: map['category'] as String,
-      subCategory: map['subCategory'] as String,
-      images:  map['images'] as String,
       vendorId: map['vendorId'] as String,
-      fullName: map['fullName'] as String
+      fullName: map['fullName'] as String,
+      subCategory: map['subCategory'] as String,
+      images: List<String>.from(
+        (map['images'] as List<dynamic>),
+      ),
     );
   }
+
+  String toJson() => json.encode(toMap());
+
+  factory Product.fromJson(String source) =>
+      Product.fromMap(json.decode(source) as Map<String, dynamic>);
 }
