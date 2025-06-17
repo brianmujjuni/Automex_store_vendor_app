@@ -6,7 +6,7 @@ import 'package:automex_store_vendor/services/manage_http_response.dart';
 import 'package:cloudinary_public/cloudinary_public.dart';
 
 class ProductController {
-  void uploadProduct(
+  Future<void> uploadProduct(
       {required String productName,
       required int productPrice,
       required int quantity,
@@ -47,7 +47,7 @@ class ProductController {
           Uri.parse("$uri/add-product"),
           body: product.toJson(),
           headers: <String, String>{
-            "Content-Type": "application/json; charset-UTF-8",
+            "Content-Type": "application/json; charset=UTF-8",
           },
         );
         manageHttpResponse(
@@ -58,6 +58,7 @@ class ProductController {
             });
       } else {
         showSnackBar(context, 'Fill all fields');
+        // print('failed');
       }
     } else {
       showSnackBar(context, 'Select image');
