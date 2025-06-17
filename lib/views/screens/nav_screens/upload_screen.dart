@@ -5,6 +5,7 @@ import 'package:automex_store_vendor/controllers/product_controller.dart';
 import 'package:automex_store_vendor/controllers/subcategory_controller.dart';
 import 'package:automex_store_vendor/models/category.dart';
 import 'package:automex_store_vendor/models/subcategory.dart';
+import 'package:automex_store_vendor/provider/vendor_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
@@ -345,6 +346,8 @@ class _UploadScreenState extends ConsumerState<UploadScreen> {
             padding: const EdgeInsets.all(15.0),
             child: InkWell(
               onTap: () async {
+                final fullName = ref.read(vendorProvider)!.fullName;
+                final vendorId = ref.read(vendorProvider)!.id;
                 if (_formKey.currentState!.validate()) {
                   _productController.uploadProduct(
                       productName: productName,
