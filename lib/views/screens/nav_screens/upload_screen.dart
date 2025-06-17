@@ -184,38 +184,41 @@ class _UploadScreenState extends State<UploadScreen> {
                 //         );
                 //       }
                 //     }),
-                FutureBuilder(
-                    future: futureCategories,
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      } else if (snapshot.hasError) {
-                        return Center(child: Text('Error: ${snapshot.error}'));
-                      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                        return Center(
-                          child: Text("No Category"),
-                        );
-                      } else {
-                        return DropdownButton<Category>(
-                          value: selectedCategory,
-                          hint: Text("Select Category"),
-                          items: snapshot.data!.map((Category category) {
-                            return DropdownMenuItem<Category>(
-                              value: category,
-                              child: Text(category.name),
-                            );
-                          }).toList(),
-                          onChanged: (value) {
-                            setState(() {
-                              selectedCategory = value;
-                            });
-                            getSubcategoryByCategory(selectedCategory);
-                          },
-                        );
-                      }
-                    }),
+                SizedBox(
+                  width: 200,
+                  child: FutureBuilder(
+                      future: futureCategories,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        } else if (snapshot.hasError) {
+                          return Center(child: Text('Error: ${snapshot.error}'));
+                        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                          return Center(
+                            child: Text("No Category"),
+                          );
+                        } else {
+                          return DropdownButton<Category>(
+                            value: selectedCategory,
+                            hint: Text("Select Category"),
+                            items: snapshot.data!.map((Category category) {
+                              return DropdownMenuItem<Category>(
+                                value: category,
+                                child: Text(category.name),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                selectedCategory = value;
+                              });
+                              getSubcategoryByCategory(selectedCategory);
+                            },
+                          );
+                        }
+                      }),
+                ),
 
                 //drop down to select subcategory
                 // FutureBuilder(
@@ -250,41 +253,44 @@ class _UploadScreenState extends State<UploadScreen> {
                 //       }
                 //     }),
 
-                FutureBuilder<List<Subcategory>>(
-                    future: futureSubcategories,
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      } else if (snapshot.hasError) {
-                        return Center(
-                          child: Text('Error: ${snapshot.error}'),
-                        );
-                      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    
-                        return Center(
-                          child: Text('No Category'),
-                        );
-                      } else {
-                        return DropdownButton<Subcategory>(
-                          value: selectedSubcategory,
-                          hint: Text('Select subcategory'),
-                          items: snapshot.data!.map((Subcategory subcategory) {
-                            
-                            return DropdownMenuItem<Subcategory>(
-                              value: subcategory,
-                              child: Text(subcategory.subCategoryName),
-                            );
-                          }).toList(),
-                          onChanged: (value) {
-                            setState(() {
-                              selectedSubcategory = value;
-                            });
-                          },
-                        );
-                      }
-                    }),
+                SizedBox(
+                  width: 200,
+                  child: FutureBuilder<List<Subcategory>>(
+                      future: futureSubcategories,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        } else if (snapshot.hasError) {
+                          return Center(
+                            child: Text('Error: ${snapshot.error}'),
+                          );
+                        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      
+                          return Center(
+                            child: Text('No Category'),
+                          );
+                        } else {
+                          return DropdownButton<Subcategory>(
+                            value: selectedSubcategory,
+                            hint: Text('Select subcategory'),
+                            items: snapshot.data!.map((Subcategory subcategory) {
+                              
+                              return DropdownMenuItem<Subcategory>(
+                                value: subcategory,
+                                child: Text(subcategory.subCategoryName),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                selectedSubcategory = value;
+                              });
+                            },
+                          );
+                        }
+                      }),
+                ),
 
                 SizedBox(
                   height: 10,
@@ -333,7 +339,7 @@ class _UploadScreenState extends State<UploadScreen> {
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 17,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.bold ,
                         letterSpacing: 1.7),
                   ),
                 ),
