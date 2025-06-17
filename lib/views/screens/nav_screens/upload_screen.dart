@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:automex_store_vendor/controllers/category_controller.dart';
+import 'package:automex_store_vendor/controllers/product_controller.dart';
 import 'package:automex_store_vendor/controllers/subcategory_controller.dart';
 import 'package:automex_store_vendor/models/category.dart';
 import 'package:automex_store_vendor/models/subcategory.dart';
@@ -16,7 +17,7 @@ class UploadScreen extends StatefulWidget {
 
 class _UploadScreenState extends State<UploadScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
+  final ProductController _productController = ProductController();
   late Future<List<Category>> futureCategories;
   Future<List<Subcategory>>? futureSubcategories;
 
