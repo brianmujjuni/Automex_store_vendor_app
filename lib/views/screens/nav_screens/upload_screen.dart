@@ -6,16 +6,17 @@ import 'package:automex_store_vendor/controllers/subcategory_controller.dart';
 import 'package:automex_store_vendor/models/category.dart';
 import 'package:automex_store_vendor/models/subcategory.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
-class UploadScreen extends StatefulWidget {
+class UploadScreen extends ConsumerStatefulWidget {
   const UploadScreen({super.key});
 
   @override
-  State<UploadScreen> createState() => _UploadScreenState();
+  _UploadScreenState createState() => _UploadScreenState();
 }
 
-class _UploadScreenState extends State<UploadScreen> {
+class _UploadScreenState extends ConsumerState<UploadScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final ProductController _productController = ProductController();
   late Future<List<Category>> futureCategories;
