@@ -44,7 +44,7 @@ class ProductController {
           fullName: fullName,
         );
         http.Response response = await http.post(
-          Uri.parse("$uri/add-product"),
+          Uri.parse("$uri/api/add-product"),
           body: product.toJson(),
           headers: <String, String>{
             "Content-Type": "application/json; charset=UTF-8",

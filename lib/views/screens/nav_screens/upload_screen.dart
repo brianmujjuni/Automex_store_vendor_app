@@ -376,11 +376,11 @@ class _UploadScreenState extends ConsumerState<UploadScreen> {
                       images.clear();
                     });
                   } else {
-                    // SnackBar(
-                    //   content: Text('All fields are required'),
-                    //   showCloseIcon: true,
-                    // );
-                    print('hii');
+                    SnackBar(
+                      content: Text('All fields are required'),
+                      showCloseIcon: true,
+                    );
+                    // print('hii');
                   }
                 },
                 child: Container(
@@ -390,14 +390,18 @@ class _UploadScreenState extends ConsumerState<UploadScreen> {
                       color: Colors.blue.shade900,
                       borderRadius: BorderRadius.circular(5)),
                   child: Center(
-                    child: Text(
-                      "Upload Product",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 17,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 1.7),
-                    ),
+                    child: isLoading
+                        ? CircularProgressIndicator(
+                            color: Colors.white,
+                          )
+                        : Text(
+                            "Upload Product",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 17,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 1.7),
+                          ),
                   ),
                 ),
               ),
